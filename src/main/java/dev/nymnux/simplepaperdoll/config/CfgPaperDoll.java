@@ -6,10 +6,9 @@ public class CfgPaperDoll {
     public static double Y_PERCENT = 0.9;
     public static int D_X = 64;
     public static int D_Y = 96;
-    public static double OFFSET_Y = 1.0;
     public static double SCALE = 64.0;
     public static double CAMERA_ROTATION_H_DEG = -10.0;
-    public static double CAMERA_ROTATION_V_DEG = -5.0;
+    public static double CAMERA_ROTATION_V_DEG = 5.0;
     public static double ROTATE_LIMIT_H_DEG = 60.0;
     public static double ROTATE_LIMIT_V_DEG = 30.0;
     public static double YAW_CHANGE_SPEED = 0.5;
@@ -21,7 +20,6 @@ public class CfgPaperDoll {
     public double yPercent = Y_PERCENT;
     public int dx = D_X;
     public int dy = D_Y;
-    public double offsetY = OFFSET_Y;
     public double scale = SCALE;
     public double cameraRotationHDeg = CAMERA_ROTATION_H_DEG;
     public double cameraRotationVDeg = CAMERA_ROTATION_V_DEG;
@@ -39,7 +37,6 @@ public class CfgPaperDoll {
         yPercent = Y_PERCENT;
         dx = D_X;
         dy = D_Y;
-        offsetY = OFFSET_Y;
         scale = SCALE;
         cameraRotationHDeg = CAMERA_ROTATION_H_DEG;
         cameraRotationVDeg = CAMERA_ROTATION_V_DEG;

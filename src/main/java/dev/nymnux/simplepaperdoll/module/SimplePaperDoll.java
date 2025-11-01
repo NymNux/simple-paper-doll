@@ -16,6 +16,7 @@ public class SimplePaperDoll {
 
     private static final double YAW_BASE = 180.0;
     private static final double MAX_PITCH_LIMIT = 90.0;
+    private static final float PI = (float) Math.PI;
 
     private static double yaw = YAW_BASE;
     private static double lastRealtimeYaw = YAW_BASE;
@@ -67,12 +68,12 @@ public class SimplePaperDoll {
         int y = (int) (scaledHeight * config.yPercent);
         int dx = config.dx;
         int dy = config.dy;
-        drawPaperDoll(drawContext, x, y, dx, dy, config.offsetY, config.scale, config.cameraRotationHDeg, config.cameraRotationVDeg, tickDelta);
+        drawPaperDoll(drawContext, x, y, dx, dy, config.scale, config.cameraRotationHDeg, config.cameraRotationVDeg, tickDelta);
         if (!config.showBox) return;
         drawOutlineQuad(drawContext, x - dx, y - dy ,dx * 2, dy * 2, 0xFFFFFFFF);
     }
 
-    private static void drawPaperDoll(DrawContext drawContext, int x, int y, int dx, int dy, double offsetY, double scale, double rotateHDeg, double rotateVDeg, float tickDelta) {
+    private static void drawPaperDoll(DrawContext drawContext, int x, int y, int dx, int dy, double scale, double rotateHDeg, double rotateVDeg, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null || client.world == null) return;
         int x1 = x - dx;
@@ -80,11 +81,11 @@ public class SimplePaperDoll {
         int x2 = x + dx;
         int y2 = y + dy;
         LivingEntity player = client.player;
-        Quaternionf rotation = new Quaternionf().rotateZ((float) Math.PI);
-        Quaternionf overrideCameraAngle = new Quaternionf()
-                .rotateY((float) Math.toRadians(rotateHDeg))
-                .rotateX((float) Math.toRadians(rotateVDeg));
-        rotation.mul(overrideCameraAngle);
+
+        float rotateHRad = (float) Math.toRadians(rotateHDeg);
+        float rotateVRad = (float) Math.toRadians(rotateVDeg);
+
+        Quaternionf rotation = new Quaternionf().rotateXYZ(rotateVRad, -rotateHRad, PI);
 
         float yaw_ = player.getYaw();
         float pitch_ = player.getPitch();
@@ -103,13 +104,13 @@ public class SimplePaperDoll {
         player.bodyYaw = (float) YAW_BASE;
         player.lastBodyYaw = (float) YAW_BASE;
 
-        Vector3f translation = new Vector3f(0.0F, (float) offsetY, 0.0F);
+        Vector3f translation = new Vector3f(0.0F, player.getHeight() / 2.0F + 0.0625F, 0.0F);
 
         EntityRenderDispatcher dispatcher = client.getEntityRenderDispatcher();
         EntityRenderer<? super LivingEntity, ?> renderer = dispatcher.getRenderer(player);
         EntityRenderState renderState = renderer.getAndUpdateRenderState(player, tickDelta);
         renderState.hitbox = null;
-        drawContext.addEntity(renderState, (float) scale, translation, rotation, overrideCameraAngle, x1, y1, x2, y2);
+        drawContext.addEntity(renderState, (float) scale, translation, rotation, null, x1, y1, x2, y2);
 
         player.setYaw(yaw_);
         player.setPitch(pitch_);
